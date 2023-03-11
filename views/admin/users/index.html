@@ -1,0 +1,47 @@
+{%extends 'base_admin.html'%}
+{%block main%}
+<main class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-sm">
+            <a href="?controller=user&action=add_user" class="btn btn-success">Thêm mới</a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">username</th>
+                        <th scope="col">password</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%set users = userService.getAll('select * from nguoidung') %}
+                    
+                    {%if users|length > 0 %}
+                        {% set dem = 0%}
+                        {% for user in users %}
+                            {% set dem = dem + 1 %}
+                            <tr>
+                                <th scope="row">{{ dem }}</th>
+                                <td>
+                                    {{user.getUserName() }}
+                                </td>
+                                <td>
+                                    {{user.getPassWord()}}
+                                </td>
+                                <td>
+                                    <a href="?controller=user&action=edit_user&id={{user.getMaNDung()}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                </td>
+                                <td>
+                                    <a href="?controller=user&action=delete_user&id={{user.getMaNDung()}}"><i class="fa-solid fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        {%endfor%}
+                    {%endif%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+{%endblock%}
