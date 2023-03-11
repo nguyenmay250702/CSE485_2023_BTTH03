@@ -1,0 +1,4 @@
+Nguyễn Thị Mây: trang chủ, tri tiết sản phẩm, login, quản lý người dùng
+Nguyễn Ngọc Yến nhi: quản lý thể loại
+Vũ Thị Thanh: quản lý tác giả
+Nguyễn Thị Tươi: quản lý bài viết
