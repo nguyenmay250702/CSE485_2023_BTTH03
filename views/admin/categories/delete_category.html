@@ -1,0 +1,21 @@
+{%extends 'base_admin.html' %}
+{%block main %}
+<main class="container">
+    <form action="" method="post"
+        style="width: 50%; background: #3d456a2e; border: 1px solid; border-radius: 10px; margin: 60px auto; padding: 30px;">
+        <h3 style="margin-bottom: 30px">
+            {{array.mess}}
+        </h3>
+        <div>
+            {%if array.display==true%}
+            <a href="?controller=article" class="btn btn-success" style="display: none;">quay lại trang quản lý bài viết</a>
+            <input class="btn btn-danger" type="submit" name='confirm' value="xóa" >
+            {%else%}
+            <a href="?controller=article" class="btn btn-success" >quay lại trang quản lý bài viết</a>
+            <input class="btn btn-danger" type="submit" name='confirm' value="xóa" style="display: none;">
+            {%endif%}
+            <a href="?controller=category" class="btn btn-warning" >quay lại</a>
+        </div>
+    </form>
+</main>
+{%endblock%}
