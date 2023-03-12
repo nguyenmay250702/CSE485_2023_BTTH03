@@ -118,7 +118,7 @@ class AuthorController
             $array['mess'] = "Bạn có chắc chắn muốn xóa thể loại này không?";
             $array['display'] = true;
         }
-        echo $this->twig->render("authors/edit_author.html",['array'=>$array]);
+        echo $this->twig->render("authors/delete_author.html",['array'=>$array]);
     }
 }
 
