@@ -1,21 +1,24 @@
-
-
 <?php
 
- use PHPUnit\Util\Filesystem;
- use Twig\Environment;
- use Twig\Loader\FilesystemLoader;
+// use PHPUnit\Util\Filesystem;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
 class ArticleController
 {
-    private $twig =null;
-    public function __construct(){
+    private $twig = null;
+    private $twig_homes = null;
+    public function __construct()
+    {
         $this->twig = new Environment(new FilesystemLoader('views/admin'));
+        $this->twig_homes = new Environment(new FilesystemLoader('views'));
+
     }
     public function index()
-    { 
+    {
         $articleService = new ArticleService();
         $articles = $articleService->getAll('select * from baiviet ');
-        echo $this->twig->render("articles/index.html",["articles"=>$articles]);
+        echo $this->twig->render("articles/index.html", ["articles" => $articles]);
 
     }
     public function add_article()
@@ -25,10 +28,6 @@ class ArticleController
         $authorService = new AuthorService();
         $categories = $categoryService->getAll('select * from theloai');
         $authors = $authorService->getAll("select * from tacgia");
-        // echo $this->twig->render('articles/add_article.html', [
-        //     'categories' => $categories,
-        //     'authors' => $authors,
-        // ]);
 
         if (isset($_POST['btn'])) {
             $tieude = trim($_POST["tieude"] ?? '');
@@ -42,35 +41,36 @@ class ArticleController
             $hinhanh = $_FILES['hinhanh']['name'] ?? '';
             $ext = pathinfo($hinhanh, PATHINFO_EXTENSION); // Get extension (lấy ra đuôi file), vd: .png, .jpg
 
-            
-                $ma_tloai = $categoryService->getAll("select * from theloai where ten_tloai = '$ten_tloai'")[0]->getMaTheLoai();
-                $ma_tgia = $authorService->getAll("select * from tacgia where ten_tgia = '$ten_tgia'")[0]->getMaTGia();
 
-                $arguments['tieude'] = $tieude;
-                $arguments['tenbaihat'] = $ten_bhat;
-                $arguments['matheloai'] = $ma_tloai;
-                $arguments['tomtat'] = $tomtat;
-                $arguments['noidung'] = $noidung;
-                $arguments['matacgia'] = $ma_tgia;
-                $arguments['hinhanh'] = $hinhanh;
+            $ma_tloai = $categoryService->getAll("select * from theloai where ten_tloai = '$ten_tloai'")[0]->getMaTheLoai();
+            $ma_tgia = $authorService->getAll("select * from tacgia where ten_tgia = '$ten_tgia'")[0]->getMaTGia();
 
-                if (!empty($hinhanh)) {
-                    if (in_array($ext, $extensions)) {
-                        move_uploaded_file($_FILES['hinhanh']['tmp_name'], 'assets/images/songs/' . $hinhanh);
-                        $articleService->insert($arguments);
-                        header("location:?controller=article");
-                    } else {
-                        $mess = "Hình ảnh chỉ nhận file: .png, .jpg";
-                        header("location:?controller=article&action=add_article&mess=$mess");
-                    }
-                } else {
+            $arguments['tieude'] = $tieude;
+            $arguments['tenbaihat'] = $ten_bhat;
+            $arguments['matheloai'] = $ma_tloai;
+            $arguments['tomtat'] = $tomtat;
+            $arguments['noidung'] = $noidung;
+            $arguments['matacgia'] = $ma_tgia;
+            $arguments['hinhanh'] = $hinhanh;
+
+            if (!empty($hinhanh)) {
+                if (in_array($ext, $extensions)) {
+                    move_uploaded_file($_FILES['hinhanh']['tmp_name'], 'assets/images/songs/' . $hinhanh);
                     $articleService->insert($arguments);
                     header("location:?controller=article");
+                } else {
+                    $mess = "Hình ảnh chỉ nhận file: .png, .jpg";
+                    header("location:?controller=article&action=add_article&mess=$mess");
                 }
+            } else {
+                $articleService->insert($arguments);
+                header("location:?controller=article");
+            }
         }
         echo $this->twig->render('articles/add_article.html', [
             'categories' => $categories,
             'authors' => $authors,
+            'mess'=>$_GET["mess"] ?? "",
         ]);
     }
 
@@ -148,6 +148,15 @@ class ArticleController
             header("location:?controller=article");
         }
         echo $this->twig->render("articles/delete_article.html");
+    }
+    public function search()
+    {
+        $articleService = new ArticleService();
+        if (isset($_POST['search'])) {
+            $nodungcantim = $_POST['nodungcantim'];
+            $articles = $articleService->getAll("SELECT * FROM baiviet WHERE ten_bhat LIKE '%$nodungcantim%'");
+            echo $this->twig_homes->render("homes/index.html", ["articles" => $articles]);
+        }
     }
 }
 
