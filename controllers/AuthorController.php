@@ -95,7 +95,7 @@ class AuthorController
         $authorService = new AuthorService();
         $articleService = new ArticleService();
 
-        $list_id = "";
+        // $list_id = "";
         $ma_tgia = $_GET['id'];
         $articles = $articleService->getAll("select * from baiviet where ma_tgia = '$ma_tgia'");
         if (isset($_POST['confirm'])) {
@@ -111,8 +111,8 @@ class AuthorController
                 header("location:?controller=author&action=delete_author&id=$ma_tgia&list_id=$list_id");
             }
         }
-        if($list_id != ""){
-            $array['mess'] = "Bạn cần xóa các bài viết có mã là: $list_id trước khi xóa thể loại có mã = $ma_tgia";
+        if(isset($_GET['list_id'])){
+            $array['mess'] = "Bạn cần xóa các bài viết có mã là: ".$_GET['list_id'] ."trước khi xóa thể loại có mã = $ma_tgia";
             $array['display'] = false;
         }else{
             $array['mess'] = "Bạn có chắc chắn muốn xóa thể loại này không?";

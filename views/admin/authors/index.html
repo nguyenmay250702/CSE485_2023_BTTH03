@@ -16,10 +16,11 @@
                 </thead>
                 <tbody>
                     {% set dem = 0%}
-                    {%for author in authors %}                   
+                    {%for author in authors %}         
+                    {% set dem=dem+1%}          
                         <tr>
                             <th scope="row">
-                                {% set dem=dem+1%}
+                                {{dem}}
                             </th>
                             <td>
                                 {{author.getTenTGia()}}
