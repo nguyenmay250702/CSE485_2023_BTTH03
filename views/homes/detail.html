@@ -1,0 +1,23 @@
+{%extends 'homes/base_home.html'%}
+
+{% set path_img = article.getHinhAnh() == ""? "default.jpg":article.getHinhAnh() %}
+
+{%block main%}
+<main class="container mt-5">
+    <div class="row mb-5">
+        <div class="col-sm-4">
+            <img src="assets/images/songs/{{path_img}}" class="img-fluid" alt="...">
+        </div>
+        <div class="col-sm-8">
+            <h5 class="card-title mb-2">
+                <a href="" class="text-decoration-none">{{article.getTieuDe()}}</a>
+            </h5>
+            <p class="card-text"><span class=" fw-bold">Bài hát: </span>{{article.getTenBHat()}}</p>
+            <p class="card-text"><span class=" fw-bold">Thể loại: </span>{{ten_tloai}}</p>
+            <p class="card-text"><span class=" fw-bold">Tóm tắt: </span>{{article.getTomTat()}}</p>
+            <p class="card-text"><span class=" fw-bold">Nội dung: </span>{{article.getNoiDung()}}</p>
+            <p class="card-text"><span class=" fw-bold">Tác giả: </span>{{ten_tgia}}</p>
+        </div>
+    </div>
+</main>
+{%endblock%}
